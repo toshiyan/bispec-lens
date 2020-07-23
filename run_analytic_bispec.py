@@ -3,12 +3,13 @@ import basic
 import numpy as np
 import healpy as hp
 
-cpmodel = 'modelp'
-#model = 'RT'
-model = 'GM'
+cpmodel = 'modelw'
+model = 'RT'
+#model = 'GM'
+#model = 'SC'
 
 #zmin, zmax = 0.0001, 1088.69
-zmin, zmax = 0.0001, 1.0
+zmin, zmax = 0.0001, 1.0334
 zn = 100
 zs = [zmax,zmax,zmax]
 
@@ -16,7 +17,7 @@ zs = [zmax,zmax,zmax]
 calc = 'bispecbin'
 
 lmin = 1
-lmax = 2000
+lmax = 2048
 olmin = lmin
 olmax = lmax
 
@@ -26,17 +27,9 @@ kan = 0
 
 D = 'data/'
 L = np.linspace(0,olmax,olmax+1)
-fpk = D+cpmodel+'/Pk/Pklin.dat'
-k, pk0 = np.loadtxt(fpk,unpack=True)
+k, pk0 = np.loadtxt( D+cpmodel+'/Pk/Pklin.dat', unpack=True )
 kn = np.size(k)
 z, dz = basic.bispec.zpoints(zmin,zmax,zn)
-
-# load aps
-nldd = np.zeros(lmax+1)
-cldd = np.zeros(lmax+1)
-nldd[2:] = np.loadtxt(D+'nldd/advact_s6_t1_rlmax4000.dat',unpack=True)[1][:lmax-1]
-cldd[2:] = np.loadtxt(D+cpmodel+'/cl/fid.dat',unpack=True)[4][:lmax-1]
-cldd[2:] = cldd[2:]/4.*(1.+1./L[2:])**2 + nldd[2:]*L[2:]**2*(L[2:]+1.)**2/4.
 
 # bispectrum
 if calc == 'bispec':
@@ -48,14 +41,22 @@ if calc == 'bispec':
 
 # binned bispectrum
 if calc == 'bispecbin':
-    shap = 'sque'
-    bc, bl0, bl1 = basic.bispec.bispeclens_bin(shap,cpmodel,model,z,dz,zn,zs,lmin,lmax,bn,k,pk0,kn,lan,kan)
-    np.savetxt('bl_'+shap+'.dat',np.array((bc,bl0,bl1)).T)
+    bl, pb = {}, {}
+    for shap in ['equi','fold','sque','angl']:
+        bc, bl[shap], pb[shap] = basic.bispec.bispeclens_bin(shap,cpmodel,model,z,dz,zn,zs,lmin,lmax,bn,k,pk0,kn,lan,kan)
+    np.savetxt('data/modelw/bl/bl_'+model+'_b'+str(bn)+'_zs1.dat',np.array((bc,bl['equi'],bl['fold'],bl['sque'],bl['angl'],pb['equi'],pb['fold'],pb['sque'],pb['angl'])).T)
 
 # total bispectrum SNR
 if calc == 'bispecsnr':
+
+    # load aps
+    nldd = np.zeros(lmax+1)
+    cldd = np.zeros(lmax+1)
+    nldd[2:] = np.loadtxt(D+'nldd/advact_s6_t1_rlmax4000.dat',unpack=True)[1][:lmax-1]
+    cldd[2:] = np.loadtxt(D+cpmodel+'/cl/fid.dat',unpack=True)[4][:lmax-1]
+    cldd[2:] = cldd[2:]/4.*(1.+1./L[2:])**2 + nldd[2:]*L[2:]**2*(L[2:]+1.)**2/4.
+
     snr = basic.bispec.bispeclens_snr(cpmodel,model,z,dz,zn,zs,2,lmax,cldd,k,pk0,kn)
     print(snr)
-    #np.savetxt('bl_'+shap+'.dat',np.array((bc,bl0,bl1)).T)
 
 
