@@ -10,7 +10,7 @@ model = 'RT'
 
 zmin, zmax = 0.0001, 1088.69
 #zmin, zmax = 0.0001, 1.0334
-zn = 50
+zn = 150
 zs = [zmax,zmax,zmax]
 
 calc = 'bispecsnr'
@@ -81,6 +81,6 @@ if calc == 'bispecsnr':
         snr[i] = basic.bispec.bispeclens_snr(cpmodel,model,z,dz,zs,2,lmax,cldd,k,pk0,btype=btype,dNdz=dNdz,cgg=clgg)
         print(lmax,snr[i])
 
-    np.savetxt('snr_'+btype+'_kappa_deproj0_sens2_16000_lT30-3000_lP30-5000_'+str(zn)+'.dat',np.array((lmax,snr)))
+    np.savetxt('snr_'+btype+'_kappa_deproj0_sens2_16000_lT30-3000_lP30-5000_'+str(zn)+'.dat',np.array((lmaxs,snr)).T)
 
 
