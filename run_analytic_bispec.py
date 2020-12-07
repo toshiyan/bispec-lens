@@ -16,8 +16,8 @@ zs = [zmax,zmax,zmax]
 calc = 'bispecsnr'
 #calc = 'bispecbin'
 
-#btype = 'ggk'
-btype = 'kkk'
+btype = 'ggk'
+#btype = 'kkk'
 
 lmin = 1
 lmax = 2048
