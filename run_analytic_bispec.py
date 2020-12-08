@@ -8,16 +8,21 @@ model = 'RT'
 #model = 'GM'
 #model = 'SC'
 
-zmin, zmax = 0.0001, 1088.69
-#zmin, zmax = 0.0001, 1.0334
-zn = 150
-zs = [zmax,zmax,zmax]
+zcmb = 1088.69
+zm   = 1.
+zs   = [zcmb,zcmb,zcmb]
+
+#zmin, zmax = 0.0001, 1088.69
+
+zmin, zmax = 0.0001, 40.
+zn = 50
 
 calc = 'bispecsnr'
 #calc = 'bispecbin'
 
-btype = 'ggk'
 #btype = 'kkk'
+#btype = 'gkk'
+btype = 'ggk'
 
 lmin = 1
 lmax = 2048
@@ -36,7 +41,7 @@ z, dz = basic.bispec.zpoints(zmin,zmax,zn)
 if btype == 'kkk': 
     dNdz = None
 else:
-    dNdz = basic.galaxy.dndz_sf(z,2.,1.,1.)
+    dNdz = basic.galaxy.dndz_sf(z,2.,1.,zm)
 
 # bispectrum
 if calc == 'bispec':
@@ -75,7 +80,6 @@ if calc == 'bispecsnr':
             clgg = None
         else:
             clgg = basic.bispec.cl_flat(cpmodel,z,dz,[zmax,zmax],lmax,k,pk0,pktype='T12',cltype='gg',dNdz=dNdz)
-            #cgg = sum(dNdz**2*Pl(:,l)*dz*kernel_cgg(z,cp)) 
             clgg += (np.pi/10800.)**2/30.
 
         snr[i] = basic.bispec.bispeclens_snr(cpmodel,model,z,dz,zs,2,lmax,cldd,k,pk0,btype=btype,dNdz=dNdz,cgg=clgg)

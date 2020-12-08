@@ -11,9 +11,9 @@ program main
   use utils_galaxy
   implicit none
   character(4) :: bisptype
-  integer :: i, l, zn, kn, lmax, imax
+  integer :: i, l, zn, zni, kn, lmax, imax
   double precision :: h, zran(2), alpha, beta, zm
-  double precision, allocatable, dimension(:)     :: z, dz, ckk, cgg, fac, dNdz
+  double precision, allocatable, dimension(:)     :: z, dz, ckk, cgg, fac, dNdz, kernel_z
   double precision, allocatable, dimension(:,:)   :: blll, rcl, datl, Pl, wp, k, ck, nldd, snr, bl
   double precision, allocatable, dimension(:,:,:) :: abc
   type(gauss_legendre_params) :: gl
@@ -72,7 +72,7 @@ program main
 
     allocate(Pl(zn,lmax),k(zn,lmax),fac(zn),abc(3,zn,lmax),wp(zn,lmax),ck(zn,lmax));  Pl=0d0; k=0d0; fac=0d0; abc=1d0; wp=0d0; ck=0d0
     call prep_lens_bispectrum(z,dz,read_dbl('zs'),cp,datl(1,:),datl(2,:),read_str('model'),k,pl,fac,abc,wp,ck,btype=bisptype)
-
+ 
     !* z-kernel
     if (bisptype=='gkk') fac  = fac*dNdz
     if (bisptype=='ggk') fac  = fac*dNdz**2
@@ -89,10 +89,12 @@ program main
     call loadtxt(read_str('nldd'),nldd(1:4,2:lmax),fsize=[4,lmax-1])
     call loadtxt(read_str('clfile'),rcl(1:6,2:lmax),fsize=[6,lmax-1])
     ckk = rcl(5,:)/4d0*(1d0+1d0/rcl(1,:))**2 + nldd(2,:)*rcl(1,:)**2*(1d0+rcl(1,:))**2/4d0
+
     do l = 2, lmax
       cgg(l) = sum(dNdz**2*Pl(:,l)*dz*kernel_cgg(z,cp)) + ac2rad**2/read_dbl('ngal')
     end do
-    !call savetxt('clgg.dat',rcl(1,:),cgg,ckk,ow=.true.)
+    call savetxt('clgg.dat',rcl(1,:),cgg,ckk,ow=.true.)
+    stop
     deallocate(rcl,nldd)
 
     !* bispectrum
@@ -103,7 +105,7 @@ program main
 
     !* SNR
     snr(1,i)   = lmax
-    snr(2:3,i) = snr_xbisp([2,lmax],zn,k,Pl,cgg,ckk,fac,abc,wp,ck,bisptype)
+    snr(2,i) = snr_xbisp([2,lmax],zn,k,Pl,cgg,ckk,fac,abc,wp,ck,bisptype)
     snr(2,i)   = dsqrt(snr(2,i))
     write(*,*) snr(1,i), snr(2,i)
 
