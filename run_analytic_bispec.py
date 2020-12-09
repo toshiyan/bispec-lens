@@ -15,7 +15,7 @@ zs   = [zcmb,zcmb,zcmb]
 #zmin, zmax = 0.0001, 1088.69
 
 zmin, zmax = 0.0001, 40.
-zn = 50
+zn = 100
 
 calc = 'bispecsnr'
 #calc = 'bispecbin'
