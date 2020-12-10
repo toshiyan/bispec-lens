@@ -15,14 +15,14 @@ zs   = [zcmb,zcmb,zcmb]
 #zmin, zmax = 0.0001, 1088.69
 
 zmin, zmax = 0.0001, 40.
-zn = 100
+zn = 50
 
 calc = 'bispecsnr'
 #calc = 'bispecbin'
 
 #btype = 'kkk'
-#btype = 'gkk'
-btype = 'ggk'
+btype = 'gkk'
+#btype = 'ggk'
 
 lmin = 1
 lmax = 2048
