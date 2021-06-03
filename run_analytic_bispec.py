@@ -17,11 +17,12 @@ zs   = [zcmb,zcmb,zcmb]
 zmin, zmax = 0.0001, 40.
 zn = 50
 
-calc = 'bispecsnr'
+calc = 'bispec'
+#calc = 'bispecsnr'
 #calc = 'bispecbin'
 
-#btype = 'kkk'
-btype = 'gkk'
+btype = 'kkk'
+#btype = 'gkk'
 #btype = 'ggk'
 
 lmin = 1
@@ -49,7 +50,7 @@ if calc == 'bispec':
     bl1, pb1 = basic.bispec.bispeclens('fold',cpmodel,model,z,dz,zs,lmin,lmax,k,pk0,btype=btype,dNdz=dNdz)
     bl2, pb2 = basic.bispec.bispeclens('sque',cpmodel,model,z,dz,zs,lmin,lmax,k,pk0,btype=btype,dNdz=dNdz)
     bl3, pb3 = basic.bispec.bispeclens('angl',cpmodel,model,z,dz,zs,lmin,lmax,k,pk0,btype=btype,dNdz=dNdz)
-    np.savetxt('test_zs'+str(zs)+'.dat',np.array((L[1:],bl0,bl1,bl2,bl3,pb0,pb1,pb2,pb3)).T)
+    np.savetxt('test_zs'+str(zs[0])+'-'+str(zs[1])+'-'+str(zs[2])+'.dat',np.array((L[1:],bl0,bl1,bl2,bl3,pb0,pb1,pb2,pb3)).T)
 
 # binned bispectrum
 if calc == 'bispecbin':
