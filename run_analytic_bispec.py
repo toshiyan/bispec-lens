@@ -17,8 +17,8 @@ zs   = [zcmb,zcmb,zcmb]
 zmin, zmax = 0.0001, 40.
 zn = 50
 
-calc = 'bispec'
-#calc = 'bispecsnr'
+#calc = 'bispec'
+calc = 'bispecsnr'
 #calc = 'bispecbin'
 
 btype = 'kkk'
@@ -35,7 +35,6 @@ bn = 20
 D = 'data/'
 L = np.linspace(0,olmax,olmax+1)
 k, pk0 = np.loadtxt( D+cpmodel+'/Pk/Pklin.dat', unpack=True )
-kn = np.size(k)
 
 z, dz = basic.bispec.zpoints(zmin,zmax,zn)
 
@@ -63,8 +62,8 @@ if calc == 'bispecbin':
 if calc == 'bispecsnr':
 
     # load aps
-    lmaxs = np.array([100,500,1000,2000,3000])
-    #lmaxs = np.array([100,500,1000])
+    #lmaxs = np.array([100,500,1000,2000,3000])
+    lmaxs = np.array([100])
     snr = np.zeros(len(lmaxs))
 
     for i, lmax in enumerate(lmaxs):
@@ -86,6 +85,6 @@ if calc == 'bispecsnr':
         snr[i] = basic.bispec.bispeclens_snr(cpmodel,model,z,dz,zs,2,lmax,cldd,k,pk0,btype=btype,dNdz=dNdz,cgg=clgg)
         print(lmax,snr[i])
 
-    np.savetxt('snr_'+btype+'_kappa_deproj0_sens2_16000_lT30-3000_lP30-5000_'+str(zn)+'.dat',np.array((lmaxs,snr)).T)
+    #np.savetxt('snr_'+btype+'_kappa_deproj0_sens2_16000_lT30-3000_lP30-5000_'+str(zn)+'.dat',np.array((lmaxs,snr)).T)
 
 
