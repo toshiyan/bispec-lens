@@ -48,9 +48,9 @@ else:
 
 zcmb = 1088.69
 
-kk_noise = 'so'
+kk_noise = 's4'
 
-#for zn, zsi in [(10,.5),(20,1.),(20,1.5),(25,2.),(30,4.),(100,zcmb)]:
+#for zn, zsi in [(10,.5),(20,1.),(20,1.5),(25,2.)]:
 for zn, zsi in [(25,2.5),(30,3.),(30,4.),(100,zcmb)]:
     zs = [zsi,zsi,zsi]
     zmin, zmax = 0.0001, min(40.,zsi)
@@ -72,6 +72,8 @@ for zn, zsi in [(25,2.5),(30,3.),(30,4.),(100,zcmb)]:
             nlkk[2:] = np.loadtxt('data/nldd/advact_s6_t1_rlmax4000.dat',unpack=True)[1][:Lmax-1]
         if kk_noise == 'so':
             nlkk[2:] = np.loadtxt('data/nldd/so/kappa_deproj0_sens2_16000_lT30-3000_lP30-5000.dat',unpack=True)[7][:Lmax-1]
+        if kk_noise == 's4':
+            nlkk[2:] = np.loadtxt('data/nldd/S4_s1_t3_rlmax4000.dat',unpack=True)[1][:Lmax-1]
 
         # observed kappa spectrum
         ckk = clkk[:Lmax+1] + nlkk
