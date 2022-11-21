@@ -50,8 +50,8 @@ zcmb = 1088.69
 
 kk_noise = 's4'
 
-#for zn, zsi in [(10,.5),(20,1.),(20,1.5),(25,2.)]:
-for zn, zsi in [(25,2.5),(30,3.),(30,4.),(100,zcmb)]:
+for zn, zsi in [(10,.5),(20,1.),(20,1.5),(25,2.)]:
+#for zn, zsi in [(25,2.5),(30,3.),(30,4.),(100,zcmb)]:
     zs = [zsi,zsi,zsi]
     zmin, zmax = 0.0001, min(40.,zsi)
     z, dz = basic.bispec.zpoints(zmin,zmax,zn)
