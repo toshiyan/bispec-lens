@@ -71,3 +71,17 @@ def cib_weight(zi,cps,nu):
     rzi = basic.cosmofuncs.dist_comoving(zi,**cps)
     return cosmology.window_cib(rzi,zi,nu)
 
+
+def kappa_noise(Lmax,experiment):
+    
+    # kappa noise spectrum
+    nlkk = np.zeros(Lmax+1)
+    if experiment == 'actdr6':
+        nlkk[3:] = np.loadtxt(root+'nldd/ACTDR6.dat',unpack=True)[1][:Lmax-2]
+    if experiment == 'so':
+        nlkk[2:] = np.loadtxt(root+'nldd/so/kappa_deproj0_sens2_16000_lT30-3000_lP30-5000.dat',unpack=True)[7][:Lmax-1]
+    if experiment == 's4':
+        nlkk[2:] = np.loadtxt(root+'nldd/kappa_deproj0_sens0_16000_lT30-3000_lP30-5000.dat',unpack=True)[7][:Lmax-1]
+
+    return nlkk
+
