@@ -18,10 +18,14 @@ k, pk0 = np.loadtxt(local.root + 'modelw/Pk/Pklin_new.dat',unpack=True)
 # source redshift
 zs = [local.zcmb,local.zcmb,local.zcmb]
 
-for zmax in [.5,1.,1.5,2.,2.5]:
+#for zmax in [.5,1.,1.5,2.,2.5,local.zcmb]:
+for zmax in [local.zcmb]:
 
     zmin = 0.0001
-    zn = int(20*(zmax-zmin))
+    if zmax>5:
+        zn = 50
+    else:
+        zn = int(10*(zmax-zmin))
 
     z, dz = basic.bispec.zpoints(zmin,zmax,zn)
     chi = basic.cosmofuncs.dist_comoving(z,**local.cps)
