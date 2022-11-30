@@ -19,6 +19,8 @@ k, pk0 = np.loadtxt(local.root + 'modelw/Pk/Pklin_new.dat',unpack=True)
 zs = [local.zcmb,local.zcmb,local.zcmb]
 
 # mass spectra
+ckk, ckI, cII, nlII = np.loadtxt(local.root+'modelw/cl/mass.dat',unpack=True,usecols=(1,2,3,4))
+fdel = ckI/(cII+nlII+1e-30)
 
 zn = 50
 
@@ -26,21 +28,15 @@ zmin, zmax = 0.0001, 20
 z, dz = basic.bispec.zpoints(zmin,zmax,zn)
 chi = basic.cosmofuncs.dist_comoving(z,**local.cps)
 
-# LSS weights
-zbn  = {'lss':6}
-zbin, dndzi, pz, frac = local.galaxy_distribution(z,zbn=zbn)
-for zi in range(zbn['lss']):
-    wgal[zi,:] = dndzi['lss']*pz['lss'][zi]
 
-# coefficients
+# CIB weight
+wcib = local.cib_weight(z,local.cps,local.nu)
 
-    
 # modified kernel
 wdel = np.zeros((zn,lmax+1))
 for l in range(lmax+1):
-    wdel[:,l] = 0.
-    for zi in range(zbn['lss']):
-        wdel[:,l] += fdel[zi,l]*wgal[zi,:]
+    if l<100: continue #low-ell cut
+    wdel[:,l] = fdel[l]*wcib
 
 # clkk
 skk = basic.bispec.cl_flat(local.cpmodel,z,dz,zs[:2],lmax,k,pk0)
