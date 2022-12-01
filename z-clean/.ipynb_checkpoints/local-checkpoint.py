@@ -87,14 +87,17 @@ def kappa_noise(Lmax,experiment):
 
 
 # galaxy survey parameters
-def galaxy_distribution( zi, survey=['lss'], zbn={'lss':5}, z0={'lss':.311}, nz_b={'lss':1.}, sig={'lss':.05}):
+def galaxy_distribution( zi, survey=['lss'], zbn={'lss':4}, z0={'lss':.311}, nz_b={'lss':1.}, sig={'lss':.05}):
     
     zbin, dndzi, pz = {}, {}, {}
-
+    
+    if zbn['lss']==4:
+        zbin['lss'] = np.array([1.5,1.7,2.,2.5,7.])
     if zbn['lss']==5:
-        zbin['lss'] = np.array([2.5,3.,3.5,4.,5.,7.])
+        zbin['lss'] = np.array([1.3,1.5,1.7,2.,2.5,7.])
     if zbn['lss']==6:
-        zbin['lss'] = np.array([2.,2.5,3.,3.5,4.,5.,7.])
+        zbin['lss'] = np.array([1.1,1.3,1.5,1.7,2.,2.5,7.])
+        #zbin['lss'] = np.array([0.,.5,1.,2.,3.,4.,7.])
     if zbn['lss']==7:
         zbin['lss'] = np.array([1.5,2.,2.5,3.,3.5,4.,5.,7.])
 
@@ -110,15 +113,17 @@ def galaxy_distribution( zi, survey=['lss'], zbn={'lss':5}, z0={'lss':.311}, nz_
     return zbin, dndzi, pz, frac
 
 
-def tracer_list(add_euc=5, add_lss=5, add_cib=True):
+def tracer_list(add_cmb=True, add_lss=5, add_cib=True):
     
     # construct list of mass tracers to be combined
     klist = {}
 
     # store id for cmb lensing maps
     kid = 0
-    klist[kid] = 'cmb'
-    kid += 1
+    
+    if add_cmb:
+        klist[kid] = 'cmb'
+        kid += 1
 
     # store id for cib maps
     if add_cib: 
