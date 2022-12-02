@@ -91,6 +91,12 @@ def galaxy_distribution( zi, survey=['lss'], zbn={'lss':4}, z0={'lss':.311}, nz_
     
     zbin, dndzi, pz = {}, {}, {}
     
+    if zbn['lss']==1:
+        zbin['lss'] = np.array([2.5,7.])
+    if zbn['lss']==2:
+        zbin['lss'] = np.array([2.,2.5,7.])
+    if zbn['lss']==3:
+        zbin['lss'] = np.array([1.7,2.,2.5,7.])
     if zbn['lss']==4:
         zbin['lss'] = np.array([1.5,1.7,2.,2.5,7.])
     if zbn['lss']==5:
@@ -99,7 +105,7 @@ def galaxy_distribution( zi, survey=['lss'], zbn={'lss':4}, z0={'lss':.311}, nz_
         zbin['lss'] = np.array([1.1,1.3,1.5,1.7,2.,2.5,7.])
         #zbin['lss'] = np.array([0.,.5,1.,2.,3.,4.,7.])
     if zbn['lss']==7:
-        zbin['lss'] = np.array([1.5,2.,2.5,3.,3.5,4.,5.,7.])
+        zbin['lss'] = np.array([0.9,1.1,1.3,1.5,1.7,2.,2.5,7.])
 
     for s in survey:
         dndzi[s] = basic.galaxy.dndz_sf(zi,2.,nz_b[s],z0=z0[s])

@@ -13,7 +13,7 @@ lmin, lmax = 1, 2048
 L = np.linspace(0,lmax,lmax+1)
 experiment = 's4'
 #experiment = 'so'
-lss_zbin = 6
+lss_zbin = 2
 
 # load P(k) at z=0
 k, pk0 = np.loadtxt(local.root + 'modelw/Pk/Pklin_new.dat',unpack=True)
@@ -40,7 +40,7 @@ icov[:,:,1:] = np.array( [ np.linalg.inv(ocov[:,:,l]) for l in range(1,lmax+1) ]
 coef = np.array( [ np.dot( icov[:,:,l], vecs[:,l] ) for l in range(lmax+1) ] )
 
 # gal weight
-zbin, dndzi, pz, __ = local.galaxy_distribution(z,zbn={'lss':lss_zbin})
+__, dndzi, pz, __ = local.galaxy_distribution(z,zbn={'lss':lss_zbin})
 wgal = np.zeros((lss_zbin,zn))
 for zi in range(lss_zbin):
     wgal[zi,:] = Hzi*dndzi['lss']*pz['lss'][zi]*(1+.84*z)/frac['lss'][zi]
@@ -86,6 +86,6 @@ for i, Lmax in enumerate(Lmaxs):
     print('Lmax=',Lmax,',snr=',np.around(oSNRt[i],decimals=4),',snr(del)=',np.around(dSNRt[i],decimals=4))
     print('Lmax=',Lmax,',snr=',np.around(oSNRm[i],decimals=4),',snr(del)=',np.around(dSNRm[i],decimals=4))
 
-np.savetxt(local.root+local.cpmodel+'/snr/snr_kkk_zclean_lss_'+experiment+'_zn'+str(zn)+'.dat',np.array((Lmaxs,oSNRt,dSNRt,oSNRm,dSNRm)).T)
+np.savetxt(local.root+local.cpmodel+'/snr/snr_kkk_zclean_lss_'+experiment+'_zbin'+str(lss_zbin)+'_zn'+str(zn)+'.dat',np.array((Lmaxs,oSNRt,dSNRt,oSNRm,dSNRm)).T)
 
 
